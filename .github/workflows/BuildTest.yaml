@@ -35,7 +35,7 @@ jobs:
       - name: Search packages in this repository
         id: list_packages
         run: |
-          echo ::set-output name=package_list::$(colcon list --names-only | tr '\n' ',' | sed -e 's/,$/\n/g')
+          echo ::set-output name=package_list::$(colcon list --names-only | tr '\n' ',' | sed -e 's/ $/\n/g')
       - name: Show target packages
         run: |
           echo "Target packages: ${{ steps.list_packages.outputs.package_list }}"
