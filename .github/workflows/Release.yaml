@@ -1,13 +1,15 @@
 name: Release
 
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'version'
+        required: true
 
 jobs:
   Release:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.issue.title, 'Release ')
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -15,10 +17,10 @@ jobs:
         id: create_release
         uses: at-wat/catkin-release-action@v1
         with:
-          issue_title: ${{ github.event.issue.title }}
           git_user: wam-v-tan
           git_email: ouxt.share@gmail.com
           github_token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
+          version: ${{ github.event.inputs.version }}
       - uses: peter-evans/create-pull-request@v3
         id: create_pull_request
         if: steps.check_branch.outputs.exist == 0 && steps.changes.outputs.count > 0
@@ -28,7 +30,7 @@ jobs:
           committer: wam-v-tan <ouxt.share@gmail.com>
           author: wam-v-tan <ouxt.share@gmail.com>
           signoff: false
-          branch:  ${{ steps.create_release.outputs.created_branch }}
+          branch: release/${{ github.event.inputs.version }}
           base: ${{ steps.check_default_branch.outputs.default_branch }}
           delete-branch: true
           title: '[Bot] Release ${{ github.event.inputs.version }}'
