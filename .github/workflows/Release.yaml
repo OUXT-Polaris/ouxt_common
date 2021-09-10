@@ -21,8 +21,8 @@ jobs:
           pip3 install bloom
       - name: generate changelog
         run: |
-          catkin_generate_changelog
+          catkin_generate_changelog --all
         continue-on-error: true
       - name: prepare release
         run: |
-          catkin_prepare_release --version ${{ github.event.inputs.version }} -y
+          catkin_prepare_release --version ${{ github.event.inputs.version }} -y --no-push
