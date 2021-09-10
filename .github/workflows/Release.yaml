@@ -3,7 +3,7 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      name:
+      version:
         description: 'version'
         required: true
 
