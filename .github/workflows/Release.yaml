@@ -21,6 +21,7 @@ jobs:
           git_user: wam-v-tan
           git_email: ouxt.share@gmail.com
           github_token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
+          version: ${{ github.event.inputs.version }}
       - uses: peter-evans/create-pull-request@v3
         id: create_pull_request
         if: steps.check_branch.outputs.exist == 0 && steps.changes.outputs.count > 0
