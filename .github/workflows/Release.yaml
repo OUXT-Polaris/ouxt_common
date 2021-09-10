@@ -25,4 +25,4 @@ jobs:
         continue-on-error: true
       - name: prepare release
         run: |
-          catkin_prepare_release --version ${{ github.event.inputs.version }} -y --no-push
+          catkin_prepare_release --version ${{ github.event.inputs.version }} -y
