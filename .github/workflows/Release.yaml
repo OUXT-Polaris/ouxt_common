@@ -6,7 +6,6 @@ on:
       name:
         description: 'version'
         required: true
-  push:
 
 jobs:
   Release:
@@ -23,3 +22,7 @@ jobs:
       - name: generate changelog
         run: |
           catkin_generate_changelog
+        continue-on-error: true
+      - name: prepare release
+        run: |
+          catkin_prepare_release --version ${{ github.event.inputs.version }} -y
