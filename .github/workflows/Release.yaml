@@ -29,4 +29,11 @@ jobs:
           git config --global user.name "wam-v-tan"
       - name: prepare release
         run: |
-          catkin_prepare_release --version ${{ github.event.inputs.version }} -y
+          catkin_prepare_release --version ${{ github.event.inputs.version }} -y --no-push
+      - name: create a GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.event.inputs.version }}
