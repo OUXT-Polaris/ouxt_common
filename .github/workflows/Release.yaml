@@ -31,7 +31,7 @@ jobs:
           committer: wam-v-tan <ouxt.share@gmail.com>
           author: wam-v-tan <ouxt.share@gmail.com>
           signoff: false
-          branch: release/${{ github.event.inputs.version }}
+          branch:  ${{ steps.create_release.outputs.created_branch }}
           base: ${{ steps.check_default_branch.outputs.default_branch }}
           delete-branch: true
           title: '[Bot] Release ${{ github.event.inputs.version }}'
