@@ -2,8 +2,8 @@
 Changelog for package ouxt_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.3 (2021-09-11)
+------------------
 * update changelog
 * remove CHANGELOG
 * 0.0.2
