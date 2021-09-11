@@ -1,12 +1,15 @@
-name: PrepareRelease
+name: Release
 
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        required: true
 
 jobs:
   Release:
-    name: Prepare Release ${{ github.event.inputs.version }}
+    name: Release ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -19,11 +22,33 @@ jobs:
           git_user: wam-v-tan
           git_email: ouxt.share@gmail.com
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: repo-sync/pull-request@v2
-        id: create_pull_request
+      - uses: peter-evans/create-pull-request@v3
         with:
-          source_branch: ${{ steps.create_release.outputs.created_branch }}
-          destination_branch: ${{ github.event.repository.default_branch }}
-          pr_title: Release ${{ steps.create_release.outputs.version}}
-          pr_body: close \#${{ github.event.issue.number }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
+          commit-message: Release ${{ github.event.inputs.version }}
+          committer: wam-v-tan <ouxt.share@gmail.com>
+          author: wam-v-tan <ouxt.share@gmail.com>
+          signoff: false
+          branch: ${{ steps.create_release.outputs.created_branch }}
+          base: ${{ github.event.repository.default_branch }}
+          delete-branch: true
+          title: '[Bot] Update workflow'
+          body: |
+            # Description  
+            Release ${{ github.event.inputs.version }}  
+            close \#${{ github.event.issue.number }}  
+          labels: |
+            bot
+          assignees: wam-v-tan
+          reviewers: wam-v-tan
+          team-reviewers: |
+            owners
+            maintainers
+          draft: false
+      - name: Enable Pull Request Automerge
+        uses: peter-evans/enable-pull-request-automerge@v1
+        with:
+          token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
+          pull-request-number: ${{ steps.create_pull_request.outputs.pull-request-number }}
+          merge-method: squash
+          repository: OUXT-Polaris/${{ matrix.package_name }}
