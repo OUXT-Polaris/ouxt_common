@@ -2,8 +2,8 @@
 Changelog for package ouxt_lint_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.0.4 (2021-09-11)
-------------------
+Forthcoming
+-----------
 * Merge pull request `#15 <https://github.com/OUXT-Polaris/ouxt_common/issues/15>`_ from OUXT-Polaris/fix/description
 * update package.xml
 * Contributors: Masaya Kataoka
