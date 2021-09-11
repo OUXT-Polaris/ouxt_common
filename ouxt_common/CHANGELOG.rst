@@ -4,6 +4,7 @@ Changelog for package ouxt_common
 
 Forthcoming
 -----------
+* update changelog
 * remove CHANGELOG
 * 0.0.2
 * add CHANGELOG.rst
