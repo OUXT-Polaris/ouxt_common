@@ -35,6 +35,7 @@ jobs:
           git checkout -b release/${{ github.event.inputs.version }}
           git add --all
           git commit -m "release version ${{ github.event.inputs.version }}"
+          git push origin ${{ github.event.repository.default_branch }}
       - name: prepare release with specific version
         run: |
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y
