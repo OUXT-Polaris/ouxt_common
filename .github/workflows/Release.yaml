@@ -30,6 +30,7 @@ jobs:
         run: |
           git config --global user.email "ouxt.share@gmail.com"
           git config --global user.name "wam-v-tan"
+          git config --global url."https://${{ secrets.WAMV_TAN_BOT_SECRET }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
       - name: commit changes
         run: |
           git add --all
@@ -37,6 +38,11 @@ jobs:
       - name: prepare release with specific version
         run: |
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y --no-push
+      - name: manually push tag
+        run: |
+          git add --all
+          git tag ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs.version }}
       - uses: peter-evans/create-pull-request@v3
         id: create_pull_request
         with:
@@ -69,20 +75,3 @@ jobs:
           token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
           pull-request-number: ${{ steps.create_pull_request.outputs.pull-request-number }}
           merge-method: squash
-  create_release:
-    name: Create Release ${{ github.event.inputs.version }}
-    runs-on: ubuntu-latest
-    needs: prepare_release
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: release/${{ github.event.inputs.version }}
-          fetch-depth: 0
-      - name: create a GitHub release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.event.inputs.version }}
-          release_name: Release ${{ github.event.inputs.version }}
