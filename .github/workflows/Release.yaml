@@ -19,13 +19,13 @@ jobs:
       - name: install bloom
         run: |
           pip3 install bloom
-      - name: generate changelog
-        run: |
-          catkin_generate_changelog
       - name: prepare git config
         run: |
           git config --global user.email "ouxt.share@gmail.com"
           git config --global user.name "wam-v-tan"
+      - name: generate changelog
+        run: |
+          catkin_generate_changelog
       - name: prepare release with specific version
         run: |
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y
