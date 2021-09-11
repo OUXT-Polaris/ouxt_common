@@ -2,6 +2,14 @@
 Changelog for package ouxt_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge pull request `#37 <https://github.com/OUXT-Polaris/ouxt_common/issues/37>`_ from OUXT-Polaris/release/0.0.4
+  [Bot] Release 0.0.4
+* 0.0.4
+* release version 0.0.4
+* Contributors: Masaya Kataoka, wam-v-tan
+
 0.0.4 (2021-09-11)
 ------------------
 * Merge pull request `#15 <https://github.com/OUXT-Polaris/ouxt_common/issues/15>`_ from OUXT-Polaris/fix/description
