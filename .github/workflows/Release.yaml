@@ -22,29 +22,13 @@ jobs:
           git_user: wam-v-tan
           git_email: ouxt.share@gmail.com
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: peter-evans/create-pull-request@v3
-        id: create_pull_request
+      - uses: repo-sync/pull-request@v2
         with:
-          token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
-          commit-message: Release ${{ github.event.inputs.version }}
-          committer: wam-v-tan <ouxt.share@gmail.com>
-          author: wam-v-tan <ouxt.share@gmail.com>
-          signoff: false
-          branch: ${{ steps.create_release.outputs.created_branch }}
-          base: ${{ steps.check_default_branch.outputs.default_branch }}
-          delete-branch: true
-          title: '[Bot] Update workflow'
-          body: |
-            # Description  
-            Release ${{ github.event.inputs.version }}  
-          labels: |
-            bot
-          assignees: wam-v-tan
-          reviewers: wam-v-tan
-          team-reviewers: |
-            owners
-            maintainers
-          draft: false
+          source_branch: ${{ steps.create_release.outputs.created_branch }}
+          destination_branch: master
+          pr_title: Release ${{ steps.create_release.outputs.version}}
+          pr_body: close \#${{ github.event.issue.number }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Enable Pull Request Automerge
         if: steps.create_pull_request.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@v1
