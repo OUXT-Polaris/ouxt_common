@@ -1,9 +1,11 @@
-name: PrepareRelease
+name: Release
 
 on:
-  issues:
-    types: [opened]
-
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        required: true
 
 jobs:
   Release:
@@ -12,20 +14,42 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: create release
-        id: create_release
-        uses: at-wat/catkin-release-action@v1
         with:
-          issue_title: ${{ github.event.issue.title }}
-          git_user: wam-v-tan
-          git_email: ouxt.share@gmail.com
-          github_token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
-      - name: open pull-request
-        uses: repo-sync/pull-request@v2
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
         with:
-          source_branch: ${{ steps.create_release.outputs.created_branch }}
-          destination_branch: ${{ github.event.repository.default_branch }}
-          pr_title: Release ${{ steps.create_release.outputs.version}}
-          pr_body: close \#${{ github.event.issue.number }}
-          pr_assignee: ${{ github.actor }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          python-version: '3.8.10'
+      - name: install bloom
+        run: |
+          pip3 install bloom
+      - name: generate changelog
+        run: |
+          catkin_generate_changelog
+      - name: prepare release with specific version
+        run: |
+          catkin_prepare_release --version ${{ github.event.inputs.version }} -y
+      - uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
+          commit-message: Setup workflow
+          committer: wam-v-tan <ouxt.share@gmail.com>
+          author: wam-v-tan <ouxt.share@gmail.com>
+          signoff: false
+          branch: workflow/sync
+          base: ${{ github.event.repository.default_branch }}
+          delete-branch: true
+          title: '[Bot] Update workflow'
+          body: |
+            # Description
+            Release ${{ github.event.inputs.version }}
+            # How to check
+            Please check passing all CI test.
+          labels: |
+            bot
+          assignees: wam-v-tan
+          reviewers: wam-v-tan
+          team-reviewers: |
+            owners
+            maintainers
+          draft: false
