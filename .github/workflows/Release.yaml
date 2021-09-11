@@ -36,7 +36,14 @@ jobs:
           git commit -m "release version ${{ github.event.inputs.version }}"
       - name: prepare release with specific version
         run: |
-          catkin_prepare_release --version ${{ github.event.inputs.version }} -y
+          catkin_prepare_release --version ${{ github.event.inputs.version }} -y --no-push
+      - name: create a GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.event.inputs.version }}
       - uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
