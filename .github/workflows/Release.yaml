@@ -21,8 +21,7 @@ jobs:
           pip3 install bloom
       - name: generate changelog
         run: |
-          catkin_generate_changelog --all
-        continue-on-error: true
+          catkin_generate_changelog
       - name: prepare git config
         run: |
           git config --global user.email "ouxt.share@gmail.com"
