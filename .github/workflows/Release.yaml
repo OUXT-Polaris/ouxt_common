@@ -8,7 +8,7 @@ on:
         required: true
 
 jobs:
-  PrepareRelease:
+  prepare_release:
     name: Prepare Release ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
@@ -69,7 +69,7 @@ jobs:
           token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
           pull-request-number: ${{ steps.create_pull_request.outputs.pull-request-number }}
           merge-method: squash
-  CreateRelease:
+  create_release:
     name: Create Release ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
