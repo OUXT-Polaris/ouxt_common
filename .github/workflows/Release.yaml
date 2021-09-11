@@ -26,17 +26,15 @@ jobs:
       - name: generate changelog
         run: |
           catkin_generate_changelog
-      - name: create branch
+      - name: prepare git config
+        run: |
+          git config --global user.email "ouxt.share@gmail.com"
+          git config --global user.name "wam-v-tan"
+      - name: commit changes
         run: |
           git checkout -b release/${{ github.event.inputs.version }}
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7
-        with:
-          branch: release/${{ github.event.inputs.version }}
-          author_name: wam-v-tan
-          author_email: ouxt.share@gmail.com
-          message: 'Release ${{ github.event.inputs.version }}'
-          add: '--all'
+          git add --all
+          git commit -m "release version ${{ github.event.inputs.version }}"
       - name: prepare release with specific version
         run: |
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y
