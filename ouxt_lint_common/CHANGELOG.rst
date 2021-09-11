@@ -2,8 +2,8 @@
 Changelog for package ouxt_lint_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.2 (2021-09-11)
+------------------
 * Merge pull request `#3 <https://github.com/OUXT-Polaris/ouxt_common/issues/3>`_ from OUXT-Polaris/feature/remove_lint_cmake
   remove ament_lint_cmake
 * remove ament_lint_cmake
