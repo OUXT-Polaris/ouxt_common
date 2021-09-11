@@ -40,8 +40,6 @@ jobs:
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y --no-push
       - name: manually push tag
         run: |
-          git add --all
-          git tag ${{ github.event.inputs.version }}
           git push origin ${{ github.event.inputs.version }}
       - uses: peter-evans/create-pull-request@v3
         id: create_pull_request
