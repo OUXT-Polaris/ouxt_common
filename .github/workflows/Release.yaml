@@ -26,6 +26,14 @@ jobs:
       - name: generate changelog
         run: |
           catkin_generate_changelog
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          branch: release/${{ github.event.inputs.version }}
+          author_name: wam-v-tan
+          author_email: ouxt.share@gmail.com
+          message: 'Your commit message'
+          add: '--all'
       - name: prepare release with specific version
         run: |
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y
@@ -36,7 +44,7 @@ jobs:
           committer: wam-v-tan <ouxt.share@gmail.com>
           author: wam-v-tan <ouxt.share@gmail.com>
           signoff: false
-          branch: workflow/sync
+          branch: release/${{ github.event.inputs.version }}
           base: ${{ github.event.repository.default_branch }}
           delete-branch: true
           title: '[Bot] Release ${{ github.event.inputs.version }}'
