@@ -23,15 +23,15 @@ jobs:
       - name: install bloom
         run: |
           pip3 install bloom
+      - name: generate changelog
+        run: |
+          catkin_generate_changelog
       - uses: EndBug/add-and-commit@v7
         with:
           author_name: wam-v-tan
           author_email: ouxt.share@gmail.com
           message: 'Update changelog for ${{ github.event.inputs.version }}'
           add: '--all'
-      - name: generate changelog
-        run: |
-          catkin_generate_changelog
       - name: prepare release with specific version
         run: |
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y
