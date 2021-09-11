@@ -23,10 +23,12 @@ jobs:
       - name: install bloom
         run: |
           pip3 install bloom
-      - name: prepare git config
-        run: |
-          git config --global user.email "ouxt.share@gmail.com"
-          git config --global user.name "wam-v-tan"
+      - uses: EndBug/add-and-commit@v7
+        with:
+          author_name: wam-v-tan
+          author_email: ouxt.share@gmail.com
+          message: 'Update changelog for ${{ github.event.inputs.version }}'
+          add: '--all'
       - name: generate changelog
         run: |
           catkin_generate_changelog
