@@ -2,6 +2,14 @@
 Changelog for package ouxt_lint_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'master' of https://github.com/OUXT-Polaris/ouxt_common
+* [Bot] Release 0.0.5 (`#38 <https://github.com/OUXT-Polaris/ouxt_common/issues/38>`_)
+  * release version 0.0.5
+  * 0.0.5
+* Contributors: Masaya Kataoka, wam-v-tan
+
 0.0.5 (2021-09-11)
 ------------------
 * Merge pull request `#37 <https://github.com/OUXT-Polaris/ouxt_common/issues/37>`_ from OUXT-Polaris/release/0.0.4
