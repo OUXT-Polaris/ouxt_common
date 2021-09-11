@@ -1,11 +1,9 @@
-name: Release
+name: PrepareRelease
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'version'
-        required: true
+  issues:
+    types: [opened]
+
 
 jobs:
   Release:
