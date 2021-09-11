@@ -2,8 +2,8 @@
 Changelog for package ouxt_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.6 (2021-09-11)
+------------------
 * Merge branch 'master' of https://github.com/OUXT-Polaris/ouxt_common
 * [Bot] Release 0.0.5 (`#38 <https://github.com/OUXT-Polaris/ouxt_common/issues/38>`_)
   * release version 0.0.5
