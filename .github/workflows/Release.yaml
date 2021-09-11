@@ -12,7 +12,7 @@ jobs:
     name: Release ${{ github.event.inputs.version }}
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: checkout ${{ github.repository.name }}
         run: |
           git clone ${{ github.server_url }}/${{ github.repository }}.git
       - name: ls
@@ -30,6 +30,8 @@ jobs:
       - name: generate changelog
         run: |
           catkin_generate_changelog
+        working-directory: ${{ github.repository.name }}
       - name: prepare release with specific version
         run: |
           catkin_prepare_release --version ${{ github.event.inputs.version }} -y
+        working-directory: ${{ github.repository.name }}
