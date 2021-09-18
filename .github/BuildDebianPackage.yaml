@@ -28,3 +28,5 @@ jobs:
         run: "yaml file:///$GITHUB_WORKSPACE/ouxt_distro/rosdep.yaml >> /etc/ros/rosdep/sources.list.d/20-default.list"
       - name: rosdep update
         run: rosdep update
+      - name: generate debian package
+        run: colcon list --names-only | xargs -L 1 bash -c 'cd "$0" && bloom-generate rosdebian --os-version focal --ros-distro ${{ matrix.rosdistro }} && fakeroot debian/rules binary'
