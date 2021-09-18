@@ -28,5 +28,64 @@ jobs:
         run: "yaml file:///$GITHUB_WORKSPACE/ouxt_distro/rosdep.yaml >> /etc/ros/rosdep/sources.list.d/20-default.list"
       - name: rosdep update
         run: rosdep update
+      - name: Copy repository
+        run: |
+            mkdir -p ~/ros2_ws/src
+            cp -rf . ~/ros2_ws/src
+      - name: Run ros-tooling/action-ros-ci@v0.2 with dependency-${{ matrix.rosdistro }}.repos
+        uses: ros-tooling/action-ros-ci@v0.2
+        if: steps.check_rosdistro_repos_files.outputs.files_exists == 'true'
+        with:
+          package-name: ${{ steps.list_packages.outputs.package_list }}
+          target-ros2-distro: ${{ matrix.rosdistro }}
+          colcon-defaults: |
+            {
+              "build": {
+                "mixin": ["coverage-gcc"]
+              }
+            }
+          # If possible, pin the repository in the workflow to a specific commit to avoid
+          # changes in colcon-mixin-repository from breaking your tests.
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/1ddb69bedfd1f04c2f000e95452f7c24a4d6176b/index.yaml
+          vcs-repo-file-url: dependency-${{ matrix.rosdistro }}.repos
+      - name: Run ros-tooling/action-ros-ci@v0.2 with dependency.repos
+        uses: ros-tooling/action-ros-ci@v0.2
+        if: steps.check_rosdistro_repos_files.outputs.files_exists == 'false' && steps.check_repos_files.outputs.files_exists == 'true'
+        with:
+          package-name: ${{ steps.list_packages.outputs.package_list }}
+          target-ros2-distro: ${{ matrix.rosdistro }}
+          colcon-defaults: |
+            {
+              "build": {
+                "mixin": ["coverage-gcc"]
+              }
+            }
+          # If possible, pin the repository in the workflow to a specific commit to avoid
+          # changes in colcon-mixin-repository from breaking your tests.
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/1ddb69bedfd1f04c2f000e95452f7c24a4d6176b/index.yaml
+          vcs-repo-file-url: dependency.repos
+      - name: Run ros-tooling/action-ros-ci@v0.2 without repos
+        uses: ros-tooling/action-ros-ci@v0.2
+        if: steps.check_rosdistro_repos_files.outputs.files_exists == 'false' && steps.check_repos_files.outputs.files_exists == 'false'
+        with:
+          package-name: ${{ steps.list_packages.outputs.package_list }}
+          target-ros2-distro: ${{ matrix.rosdistro }}
+          colcon-defaults: |
+            {
+              "build": {
+                "mixin": ["coverage-gcc"]
+              }
+            }
+          # If possible, pin the repository in the workflow to a specific commit to avoid
+          # changes in colcon-mixin-repository from breaking your tests.
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/1ddb69bedfd1f04c2f000e95452f7c24a4d6176b/index.yaml
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v2
+        if: failure()
+        with:
+          status: ${{ job.status }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
       - name: generate debian package
         run: colcon list --names-only | xargs -L 1 bash -c 'cd "$0" && bloom-generate rosdebian --os-version focal --ros-distro ${{ matrix.rosdistro }} && fakeroot debian/rules binary'
