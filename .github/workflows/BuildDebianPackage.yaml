@@ -25,7 +25,7 @@ jobs:
         with:
           required-ros-distributions: ${{ matrix.rosdistro }}
       - name: add to rosdep.yaml
-        run: echo 'yaml file:///$GITHUB_WORKSPACE/ouxt_distro/rosdep.yaml' | tee -a /etc/ros/rosdep/sources.list.d/20-default.list
+        run: echo 'yaml file:///$GITHUB_WORKSPACE/ouxt_distro/rosdep.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list
       - name: rosdep update
         run: rosdep update
       - name: Copy repository
