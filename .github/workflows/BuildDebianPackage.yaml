@@ -20,6 +20,8 @@ jobs:
           repository: OUXT-Polaris/ouxt_distro
           token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
           path: "ouxt_distro"
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - uses: actions/checkout@v2
         with:
           path: ${{ github.repository.name }}
