@@ -7,8 +7,21 @@ on:
       - '*'
 
 jobs:
+  fetch_rosdep_yaml:
+    name: Fetch rosdep.yaml
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: OUXT-Polaris/ouxt_distro
+          token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: rosdep_yaml
+          path: rosdep.yaml
+
   build_debian_package:
-    name: BuildDebianPackage
+    name: Build debian package
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -17,14 +30,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: OUXT-Polaris/ouxt_distro
-          token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
-          path: "ouxt_distro"
-      - name: check rosdep_yaml
-        run: cat /home/runner/work/ouxt_common/ouxt_common/ouxt_distro/rosdep.yaml
-      - uses: actions/checkout@v2
-        with:
           path: ${{ github.repository.name }}
+      - uses: actions/download-artifact@v2
+        with:
+          name: rosdep_yaml
+      - name: check rosdep_yaml
+        run: cat rosdep.yaml
       - name: Check dependency-${{ matrix.rosdistro }}.repos existence
         id: check_rosdistro_repos_files
         uses: andstor/file-existence-action@v1
@@ -45,10 +56,6 @@ jobs:
         run: echo 'yaml file:///home/runner/work/ouxt_common/ouxt_common/ouxt_distro/rosdep.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list
       - name: rosdep update
         run: rosdep update
-      - name: Copy repository
-        run: |
-            mkdir -p ~/ros2_ws/src
-            cp -rf ${{ github.repository.name }} ~/ros2_ws/src
       - name: Run ros-tooling/action-ros-ci@v0.2 with dependency-${{ matrix.rosdistro }}.repos
         uses: ros-tooling/action-ros-ci@v0.2
         if: steps.check_rosdistro_repos_files.outputs.files_exists == 'true'
@@ -98,7 +105,6 @@ jobs:
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/1ddb69bedfd1f04c2f000e95452f7c24a4d6176b/index.yaml
       - name: generate debian package
         run: colcon list --names-only | xargs -L 1 bash -c 'cd "$0" && bloom-generate rosdebian --os-version focal --ros-distro ${{ matrix.rosdistro }} && fakeroot debian/rules binary'
-        working-directory: ~/ros2_ws/src/${{ github.repository.name }}
       - name: Notify Slack
         uses: 8398a7/action-slack@v2
         if: failure()
