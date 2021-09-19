@@ -20,6 +20,24 @@ jobs:
           repository: OUXT-Polaris/ouxt_distro
           token: ${{ secrets.WAMV_TAN_BOT_SECRET }}
           path: "ouxt_distro"
+
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ github.repository.name }}
+
+      - name: Check dependency-${{ matrix.rosdistro }}.repos existence
+        id: check_rosdistro_repos_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: dependency-${{ matrix.rosdistro }}.repos
+          allow_failure: false
+      - name: Check dependency.repos existence
+        id: check_repos_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: dependency.repos
+          allow_failure: false
+
       - name: Setup ROS2 ${{ matrix.rosdistro }} environment
         uses: ros-tooling/setup-ros@v0.2
         with:
@@ -31,7 +49,7 @@ jobs:
       - name: Copy repository
         run: |
             mkdir -p ~/ros2_ws/src
-            cp -rf . ~/ros2_ws/src
+            cp -rf ${{ github.repository.name }} ~/ros2_ws/src
       - name: Run ros-tooling/action-ros-ci@v0.2 with dependency-${{ matrix.rosdistro }}.repos
         uses: ros-tooling/action-ros-ci@v0.2
         if: steps.check_rosdistro_repos_files.outputs.files_exists == 'true'
