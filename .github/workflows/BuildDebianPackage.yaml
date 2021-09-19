@@ -54,7 +54,7 @@ jobs:
         with:
           required-ros-distributions: ${{ matrix.rosdistro }}
       - name: add to rosdep.yaml
-        run: echo 'yaml file:///home/runner/work/ouxt_common/ouxt_common/ouxt_distro/rosdep.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list
+        run: echo 'yaml file:///home/runner/work/ouxt_common/ouxt_common/rosdep.yaml' | sudo tee -a /etc/ros/rosdep/sources.list.d/20-default.list
       - name: rosdep update
         run: rosdep update
       - name: Run ros-tooling/action-ros-ci@v0.2 with dependency-${{ matrix.rosdistro }}.repos
