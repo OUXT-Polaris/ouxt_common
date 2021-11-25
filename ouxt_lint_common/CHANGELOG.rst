@@ -10,8 +10,8 @@ Changelog for package ouxt_lint_common
   * 0.0.5
 * Contributors: Masaya Kataoka, wam-v-tan
 
-Forthcoming
------------
+0.0.8 (2021-11-25)
+------------------
 
 0.0.7 (2021-11-14)
 ------------------
