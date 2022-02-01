@@ -34,12 +34,6 @@ jobs:
         with:
           ros2-distro: ${{ matrix.rosdistro }}
           external-repos: dependency-${{ matrix.rosdistro }}.repos
-      - name: Run ichiro-its/ros2-ci@v1.0.0 with dependency-${{ matrix.rosdistro }}.repos
-        uses: ichiro-its/ros2-ci@v1.0.0
-        if: steps.check_rosdistro_repos_files.outputs.files_exists == 'true'
-        with:
-          ros2-distro: ${{ matrix.rosdistro }}
-          external-repos: dependency-${{ matrix.rosdistro }}.repos
       - name: Run ichiro-its/ros2-ci@v1.0.0 with dependency.repos
         uses: ichiro-its/ros2-ci@v1.0.0
         if: steps.check_rosdistro_repos_files.outputs.files_exists == 'false' && steps.check_repos_files.outputs.files_exists == 'true'
