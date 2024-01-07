@@ -13,7 +13,7 @@
   <exec_depend>ament_cmake_copyright</exec_depend>
   <exec_depend>ament_cmake_pep257</exec_depend>
   <exec_depend>ament_cmake_xmllint</exec_depend>
-  <exec_deoebd>ament_cmake_gtest</exec_depend>
+  <exec_depend>ament_cmake_gtest</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
